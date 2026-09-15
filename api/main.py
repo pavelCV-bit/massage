@@ -2,7 +2,10 @@ import os
 import requests
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from db import get_db
+try:
+    from api.db import get_db
+except ImportError:
+    from db import get_db
 
 app = FastAPI()
 
