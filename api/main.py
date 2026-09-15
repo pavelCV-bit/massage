@@ -6,8 +6,8 @@ from db import get_db
 
 app = FastAPI()
 
-BOT_TOKEN = os.environ.get("8958426241:AAHKGFlttzh6ISPrlqQTNJmexJLRR94-S_4")
-CHAT_ID = os.environ.get("1408281711")
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 class BookingRequest(BaseModel):
     service_id: str
