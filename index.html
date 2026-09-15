@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Студия оздоровительных массажей — запись</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest: #24352A;
+    --forest-soft: #3B5443;
+    --sand: #F1ECDF;
+    --card: #FCFAF4;
+    --ink: #22261F;
+    --ink-soft: #5B6157;
+    --brass: #A87F49;
+    --brass-dark: #8C6838;
+    --line: #DDD5C0;
+    --ok: #3B5443;
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--sand);
+    color: var(--ink);
+    font-family: 'Manrope', -apple-system, sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:420px;
+    min-height:100vh;
+    background: var(--sand);
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    padding: 28px 20px 20px;
+    background: var(--forest);
+    color: #F4EFE2;
+    border-radius: 0 0 22px 22px;
+  }
+  header .eyebrow{
+    font-size: 13px;
+    color: #C9D3C7;
+    margin: 0 0 4px;
+  }
+  header h1{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.2;
+    margin: 0 0 6px;
+  }
+  header p{
+    margin:0;
+    font-size: 14px;
+    color: #C9D3C7;
+  }
+
+  .progress{
+    display:flex;
+    gap:6px;
+    padding: 16px 20px 0;
+  }
+  .progress .seg{
+    flex:1;
+    height:3px;
+    border-radius:2px;
+    background: var(--line);
+  }
+  .progress .seg.done{ background: var(--brass); }
+
+  main{
+    flex:1;
+    padding: 20px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .step-title{
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    font-weight:500;
+    margin: 6px 0 2px;
+  }
+  .step-hint{
+    font-size:14px;
+    color: var(--ink-soft);
+    margin: 0 0 6px;
+  }
+
+  .service{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 10px;
+    cursor:pointer;
+    text-align:left;
+    width:100%;
+    font-family:'Manrope';
+  }
+  .service.selected{
+    border-color: var(--brass);
+    background: #FBF3E6;
+  }
+  .service .name{
+    font-size:16px;
+    font-weight:600;
+    color: var(--ink);
+  }
+  .service .meta{
+    font-size:13px;
+    color: var(--ink-soft);
+    margin-top:2px;
+  }
+  .service .price{
+    font-size:16px;
+    font-weight:700;
+    color: var(--forest-soft);
+    white-space:nowrap;
+  }
+
+  .day-row{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom: 4px;
+  }
+  .day{
+    flex: 0 0 auto;
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    text-align:center;
+    cursor:pointer;
+    min-width: 58px;
+  }
+  .day .dow{ font-size:12px; color:var(--ink-soft); }
+  .day .num{ font-size:17px; font-weight:700; margin-top:2px; }
+  .day.selected{ background: var(--forest); border-color: var(--forest); }
+  .day.selected .dow, .day.selected .num{ color:#F4EFE2; }
+
+  .slot-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:8px;
+  }
+  .slot{
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 4px;
+    text-align:center;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .slot.selected{ background: var(--brass); border-color: var(--brass); color:#fff; }
+  .slot.taken{
+    opacity:.4;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+
+  label.field{
+    display:block;
+    font-size:13px;
+    color: var(--ink-soft);
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  input[type=text], input[type=tel]{
+    width:100%;
+    padding:14px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    font-size:16px;
+    font-family:'Manrope';
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  input:focus{ outline: 2px solid var(--brass); outline-offset:1px; }
+
+  .summary-card{
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    padding:16px;
+  }
+  .summary-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    padding:6px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .summary-row:last-child{ border-bottom:none; }
+  .summary-row .k{ color:var(--ink-soft); }
+  .summary-row .v{ font-weight:600; }
+
+  footer{
+    padding: 14px 20px 26px;
+    display:flex;
+    gap:10px;
+  }
+  button.primary{
+    flex:1;
+    background: var(--forest);
+    color:#F4EFE2;
+    border:none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size:16px;
+    font-weight:700;
+    font-family:'Manrope';
+    cursor:pointer;
+  }
+  button.primary:disabled{ background:#A9B3A5; cursor:not-allowed; }
+  button.ghost{
+    background:transparent;
+    border:1px solid var(--line);
+    color: var(--ink-soft);
+    border-radius:12px;
+    padding: 16px 18px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .confirm-screen{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 20px;
+    gap: 10px;
+  }
+  .confirm-icon{
+    width:64px; height:64px;
+    border-radius:50%;
+    background: var(--forest);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom: 8px;
+  }
+  .confirm-icon svg{ width:30px; height:30px; }
+  .confirm-screen h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:22px;
+    margin: 0;
+  }
+  .confirm-screen p{
+    color: var(--ink-soft);
+    font-size:15px;
+    max-width: 300px;
+    margin: 0;
+  }
+  .confirm-detail{
+    margin-top: 18px;
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    padding:14px 18px;
+    width:100%;
+    max-width: 280px;
+  }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <p class="eyebrow">Студия оздоровительных массажей</p>
+    <h1 id="headerTitle">Запись на массаж</h1>
+    <p id="headerSub">Выберите услугу и удобное время — Надежда подтвердит запись лично</p>
+  </header>
+
+  <div class="progress" id="progress">
+    <div class="seg done" data-step="1"></div>
+    <div class="seg" data-step="2"></div>
+    <div class="seg" data-step="3"></div>
+  </div>
+
+  <main id="main">
+
+    <!-- STEP 1: услуга -->
+    <section id="step1">
+      <p class="step-title">Какой массаж вам нужен?</p>
+      <p class="step-hint">Выберите одну услугу</p>
+      <div id="serviceList"></div>
+    </section>
+
+    <!-- STEP 2: время -->
+    <section id="step2" class="hidden">
+      <p class="step-title">Когда вам удобно?</p>
+      <p class="step-hint">Выберите день и время</p>
+      <div class="day-row" id="dayRow"></div>
+      <div class="slot-grid" id="slotGrid" style="margin-top:10px;"></div>
+    </section>
+
+    <!-- STEP 3: контакты -->
+    <section id="step3" class="hidden">
+      <p class="step-title">Как с вами связаться?</p>
+      <p class="step-hint">Надежда напишет для подтверждения</p>
+      <label class="field" for="fName">Ваше имя</label>
+      <input type="text" id="fName" placeholder="Например, Алия">
+      <label class="field" for="fPhone">Телефон</label>
+      <input type="tel" id="fPhone" placeholder="+7 700 000 00 00">
+
+      <div class="summary-card" id="summaryCard"></div>
+    </section>
+
+  </main>
+
+  <footer id="footer">
+    <button class="ghost hidden" id="backBtn">Назад</button>
+    <button class="primary" id="nextBtn" disabled>Выбрать услугу</button>
+  </footer>
+
+  <!-- CONFIRM SCREEN -->
+  <div class="confirm-screen hidden" id="confirmScreen">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12.5L9.5 18L20 6" stroke="#F4EFE2" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Заявка отправлена</h2>
+    <p>Надежда получила вашу заявку и свяжется с вами, чтобы подтвердить запись</p>
+    <div class="confirm-detail" id="confirmDetail"></div>
+  </div>
+
+</div>
+
+<script>
+/* ---------- ДАННЫЕ (заменить на реальные услуги / часы студии) ---------- */
+const SERVICES = [
+  { id: 'classic', name: 'Классический массаж', meta: '60 мин', price: 8000 },
+  { id: 'back', name: 'Массаж спины', meta: '40 мин', price: 6000 },
+  { id: 'neck', name: 'Шейно-воротниковая зона', meta: '30 мин', price: 4500 },
+  { id: 'anticell', name: 'Антицеллюлитный массаж', meta: '50 мин', price: 9000 },
+];
+
+const DOW = ['вс','пн','вт','ср','чт','пт','сб'];
+const WORK_HOURS = ['10:00','11:00','12:00','13:00','15:00','16:00','17:00','18:00'];
+
+/* Занятые слоты — в реальной версии это придёт с бэкенда (GET /api/slots?date=) */
+const TAKEN = { }; // заполняется после загрузки с сервера, см. loadTakenSlots()
+
+/* ---------- СОСТОЯНИЕ ---------- */
+let state = { step: 1, service: null, dateISO: null, dateLabel: null, time: null };
+
+/* ---------- ГЕНЕРАЦИЯ БЛИЖАЙШИХ 6 ДНЕЙ ---------- */
+function buildDays(){
+  const days = [];
+  const today = new Date();
+  for (let i=0; i<6; i++){
+    const d = new Date(today);
+    d.setDate(today.getDate()+i);
+    days.push({
+      iso: d.toISOString().slice(0,10),
+      dow: DOW[d.getDay()],
+      num: d.getDate()
+    });
+  }
+  return days;
+}
+
+/* ---------- РЕНДЕР ШАГА 1 ---------- */
+function renderServices(){
+  const list = document.getElementById('serviceList');
+  list.innerHTML = '';
+  SERVICES.forEach(s=>{
+    const btn = document.createElement('button');
+    btn.className = 'service' + (state.service?.id===s.id ? ' selected':'');
+    btn.innerHTML = `
+      <div>
+        <div class="name">${s.name}</div>
+        <div class="meta">${s.meta}</div>
+      </div>
+      <div class="price">${s.price.toLocaleString('ru-RU')} ₸</div>`;
+    btn.onclick = () => { state.service = s; renderServices(); updateFooter(); };
+    list.appendChild(btn);
+  });
+}
+
+/* ---------- РЕНДЕР ШАГА 2 ---------- */
+function renderDays(){
+  const row = document.getElementById('dayRow');
+  row.innerHTML = '';
+  buildDays().forEach(d=>{
+    const el = document.createElement('div');
+    el.className = 'day' + (state.dateISO===d.iso ? ' selected':'');
+    el.innerHTML = `<div class="dow">${d.dow}</div><div class="num">${d.num}</div>`;
+    el.onclick = () => {
+      state.dateISO = d.iso;
+      state.dateLabel = `${d.num} ${d.dow}`;
+      state.time = null;
+      loadTakenSlots(d.iso).then(()=>{ renderDays(); renderSlots(); updateFooter(); });
+    };
+    row.appendChild(el);
+  });
+}
+
+function renderSlots(){
+  const grid = document.getElementById('slotGrid');
+  grid.innerHTML = '';
+  if (!state.dateISO){ return; }
+  const takenForDay = TAKEN[state.dateISO] || [];
+  WORK_HOURS.forEach(t=>{
+    const isTaken = takenForDay.includes(t);
+    const el = document.createElement('div');
+    el.className = 'slot' + (state.time===t ? ' selected':'') + (isTaken ? ' taken':'');
+    el.textContent = t;
+    if (!isTaken){
+      el.onclick = () => { state.time = t; renderSlots(); updateFooter(); };
+    }
+    grid.appendChild(el);
+  });
+}
+
+/* ---------- РЕНДЕР ШАГА 3 ---------- */
+function renderSummary(){
+  const card = document.getElementById('summaryCard');
+  card.innerHTML = `
+    <div class="summary-row"><span class="k">Услуга</span><span class="v">${state.service.name}</span></div>
+    <div class="summary-row"><span class="k">Дата</span><span class="v">${state.dateLabel}</span></div>
+    <div class="summary-row"><span class="k">Время</span><span class="v">${state.time}</span></div>
+    <div class="summary-row"><span class="k">Стоимость</span><span class="v">${state.service.price.toLocaleString('ru-RU')} ₸</span></div>
+  `;
+}
+
+/* ---------- ШАГИ / НАВИГАЦИЯ ---------- */
+function goToStep(n){
+  state.step = n;
+  [1,2,3].forEach(i=>{
+    document.getElementById('step'+i).classList.toggle('hidden', i!==n);
+  });
+  document.querySelectorAll('.progress .seg').forEach(seg=>{
+    seg.classList.toggle('done', parseInt(seg.dataset.step) <= n);
+  });
+  document.getElementById('backBtn').classList.toggle('hidden', n===1);
+
+  if (n===2){ renderDays(); renderSlots(); }
+  if (n===3){ renderSummary(); }
+  updateFooter();
+}
+
+function updateFooter(){
+  const btn = document.getElementById('nextBtn');
+  if (state.step===1){
+    btn.textContent = 'Выбрать время';
+    btn.disabled = !state.service;
+  } else if (state.step===2){
+    btn.textContent = 'Продолжить';
+    btn.disabled = !(state.dateISO && state.time);
+  } else if (state.step===3){
+    btn.textContent = 'Отправить заявку';
+    const name = document.getElementById('fName').value.trim();
+    const phone = document.getElementById('fPhone').value.trim();
+    btn.disabled = !(name.length>1 && phone.length>=6);
+  }
+}
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (state.step===1){ goToStep(2); }
+  else if (state.step===2){ goToStep(3); }
+  else if (state.step===3){ submitBooking(); }
+});
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (state.step>1){ goToStep(state.step-1); }
+});
+document.getElementById('fName').addEventListener('input', updateFooter);
+document.getElementById('fPhone').addEventListener('input', updateFooter);
+
+/* ---------- БЭКЕНД: занятые слоты ---------- */
+/* Когда бэкенд (FastAPI + SQLite, см. ТЗ) будет развёрнут — эта функция
+   подтянет реально занятые часы для выбранной даты. Пока бэкенда нет,
+   просто ничего не блокирует (TAKEN остаётся пустым). */
+async function loadTakenSlots(dateISO){
+  try{
+    const res = await fetch(`/api/slots?date=${dateISO}`);
+    if (!res.ok) throw new Error('no backend yet');
+    const data = await res.json(); // ожидаем { taken: ["11:00","15:00"] }
+    TAKEN[dateISO] = data.taken || [];
+  }catch(e){
+    // бэкенд ещё не подключен — работаем без ограничений, это нормально для демо
+    TAKEN[dateISO] = TAKEN[dateISO] || [];
+  }
+}
+
+/* ---------- БЭКЕНД: отправка заявки ---------- */
+async function submitBooking(){
+  const name = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const payload = {
+    service_id: state.service.id,
+    service_name: state.service.name,
+    price: state.service.price,
+    date: state.dateISO,
+    time: state.time,
+    client_name: name,
+    client_phone: phone
+  };
+
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = 'Отправляем...';
+
+  try{
+    const res = await fetch('/api/book', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('backend error');
+  }catch(e){
+    // Бэкенд ещё не подключен (см. ТЗ для Gemini) — для демо всё равно
+    // показываем клиенту финальный экран, чтобы сценарий можно было
+    // показать владелице уже сейчас.
+    console.warn('Заявка не ушла на сервер (бэкенд не подключен), показываем демо-подтверждение', e);
+  }
+
+  showConfirm(payload);
+}
+
+function showConfirm(payload){
+  document.getElementById('main').classList.add('hidden');
+  document.getElementById('footer').classList.add('hidden');
+  document.getElementById('progress').classList.add('hidden');
+  document.getElementById('confirmScreen').classList.remove('hidden');
+  document.getElementById('confirmDetail').innerHTML = `
+    <div class="summary-row"><span class="k">Услуга</span><span class="v">${payload.service_name}</span></div>
+    <div class="summary-row"><span class="k">Когда</span><span class="v">${state.dateLabel}, ${payload.time}</span></div>
+    <div class="summary-row"><span class="k">Имя</span><span class="v">${payload.client_name}</span></div>
+  `;
+}
+
+/* ---------- INIT ---------- */
+renderServices();
+updateFooter();
+</script>
+</body>
+</html>
